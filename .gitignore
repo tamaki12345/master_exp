@@ -1,0 +1,11 @@
+SELFRec-main/*
+LibRecommender-master/*
+session-rec-master/*
+ThirtyMusic/*
+ThirtyMusic/*
+*.csv
+*.tsv
+*.npz
+*.pkl
+*.json
+*.txt
