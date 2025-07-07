@@ -5,6 +5,7 @@ from sklearn.metrics.pairwise import cosine_distances
 from bayesian import BayesianService
 
 from node import Node
+from coherence_calculator import Calculator
 
 def embedding_similarity(a_embeddings, b_embeddings):
     return np.mean(cosine_distances(a_embeddings.T, b_embeddings.T))
@@ -68,14 +69,14 @@ class GreedyArrangeAlgo():
         return np.sum(np.square(self.target_coherence - self.get_coherence(nodes)))
     
     def transition_error(self, i, current: list[Node], previous: list[Node]):
-        current_dist = current[i] - current[i+1]
-        previous_dist = previous[i] - previous[i + 1]
+        current_dist = self.calculator.substract( current[i].id, current[i+1].id )
+        previous_dist = self.calculator.substract( previous[i].id, previous[i+1].id )
 
         error = np.square(current_dist - self.target_transition) - np.square(previous_dist - self.target_transition)
         return np.sum(error)
     
     def get_coherence(self, nodes: list[Node]):
-        return 1.0 - get_sq_variance(nodes) / self.pl_variance
+        return 1.0 - self.calculator.sequential_variance(nodes) / self.pl_variance
     
     def get_new_transitions(self, i, dist, current: list[Node]):
         if dist == 1:
@@ -89,6 +90,7 @@ class GreedyArrangeAlgo():
     def _create_node_system(self, bayesian_service: BayesianService, matrix, track_to_ids):
         matrix = matrix.tocsc()
         i = 0
+        id = 0
         self.nodes = []
         tracks = self.playlist
 
@@ -107,7 +109,8 @@ class GreedyArrangeAlgo():
                         continue
                 except KeyError:
                     break
-            node = Node.create_node(node_name, node_tracks, matrix, track_to_ids)
+            node = Node.create_node(id, node_name, node_tracks, matrix, track_to_ids)
+            id += 1
             self.nodes.append(node)
             i+=1
 
@@ -159,5 +162,9 @@ class GreedyArrangeAlgo():
         self.playlist = playlist
         self._set_targets(estimator, coherence_table)
         self._create_node_system(bayesian_service, matrix, track_to_ids)
+
+        self.calculator = Calculator(self.nodes)
         if len(self.nodes) > 1:
-            self.pl_variance = get_pl_variance(self.nodes)
+            self.pl_variance = self.calculator.playlist_variance(self.nodes)
+        else:
+            self.pl_variance = 0

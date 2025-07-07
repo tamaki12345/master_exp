@@ -7,21 +7,25 @@ def embedding_similarity(a_embeddings, b_embeddings):
 
 
 class Node:
-    def __init__(self, name, tracks: list[int], artists: list):
+    def __init__(self, id, name, tracks: list[int], artists: list):
+        self.id = id
         self.name = name 
         self.tracks = tracks
         self.artists = artists
 
     @staticmethod
-    def create_node(name, tracks: list[int],matrix, track_to_ids):
+    def create_node(id, name, tracks: list[int],matrix, track_to_ids):
         artists = [matrix[:, track_to_ids[t]] for t in tracks]
-        return Node(name, tracks, artists)
+        return Node(id, name, tracks, artists)
 
 
     def __sub__(self, other):
         assert isinstance(other, Node)
 
-        artist_a = self.artists[-1]
-        artist_b = self.artists[0]
-        sq_distances =embedding_similarity(artist_a, artist_b)
-        return sq_distances
+        sq_distances = 0
+        for artist_a in self.artists:
+            for artist_b in other.artists:
+                # print(artist_a.ndim)
+                # print(artist_b.ndim)
+                sq_distances += cosine_distances(artist_a.T, artist_b.T)
+        return np.mean(sq_distances)
