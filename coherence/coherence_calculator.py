@@ -16,7 +16,7 @@ class Calculator():
             i = a_track.id
             for l, b_track in enumerate(nodes[k + 1:]):
                 j = b_track.id
-                sum_ += self.distance_matrix.substract(i, j) ** 2
+                sum_ += ( self.distance_matrix.substract(i, j) ) ** 2
         div = n * (n - 1)
         
         # 分散を返す

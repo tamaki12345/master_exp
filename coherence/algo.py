@@ -151,10 +151,15 @@ class GreedyArrangeAlgo():
                 dist += 1
         if output:
             print("Total trans error:", total_trans_error / iteration)
-        return playlist
+
+        Rearranged = []
+        for track in playlist:
+            Rearranged += track.tracks
+
+        return Rearranged
     
     def _set_targets(self, estimator, coherence_table):
-        X = coherence_table.loc[[self.pid]][estimator.attributes].values
+        X = coherence_table[ coherence_table['id'] == self.pid ][estimator.attributes].values
         self.target_coherence = estimator.coherence_estimator.predict(X)[0]
         self.target_transition = estimator.transition_estimator.predict(X)[0]
 

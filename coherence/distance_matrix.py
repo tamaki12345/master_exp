@@ -14,15 +14,15 @@ class DistanceMatrix():
         distance_matrix = np.zeros((n, n))
         # embeddings = [ track.artists for track in playlist]
 
-        for i, a_track in enumerate(playlist[:-1]):
-            for j, b_track in enumerate(playlist[i+1:]):
+        for k, a_track in enumerate(playlist[:-1]):
+            for l, b_track in enumerate(playlist[k + 1:]):
+                i = a_track.id
+                j = b_track.id
                 d = a_track - b_track
-                distance_matrix[i, i+j+1] = d
-                distance_matrix[i+j+1, i] = d
-
-        distance_matrix = (distance_matrix*1000000000).astype(int)
+                distance_matrix[i,j] = d
+                distance_matrix[j, i] = d
 
         return distance_matrix
     
     def substract(self, a, b):
-        return int(self.distance_matrix[a,b])
+        return self.distance_matrix[a,b]
