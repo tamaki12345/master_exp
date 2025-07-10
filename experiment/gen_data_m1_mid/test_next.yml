@@ -3,7 +3,7 @@ key: baselines_and_models_and_hybrids #added to the csv names
 evaluation: evaluation #evaluation|evaluation_last|evaluation_multiple|evaluation_user_based|evaluation_user_based_multiple
 data:
   name: experiment #added in the end of the csv names
-  folder: /home/tamak/master_exp/modify_dataset/srec_data/
+  folder: ./srec_data/
   prefix: experiment
 #  slices: 5 #only window
 #  skip: [0,3] #only window
