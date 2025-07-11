@@ -10,7 +10,7 @@ data:
   opts: {sessions_test: 1000}
 
 results:
-  folder: results/test_next2/
+  folder: results/test_next/
 
 metrics:
 - class: accuracy.HitRate
@@ -34,12 +34,12 @@ algorithms:
 # baselines
 # - class: baselines.ar.AssociationRules
 #   key: ar
-- class: baselines.sr.SequentialRules
-  params: { steps: 20, weighting: quadratic }
-  key: sr
-- class: knn.sknn.ContextKNN
-  params: { k: 100, sample_size: 500, similarity: cosine }
-  key: sknn
+# - class: baselines.sr.SequentialRules
+#   params: { steps: 20, weighting: quadratic }
+#   key: sr
+# - class: knn.sknn.ContextKNN
+#   params: { k: 100, sample_size: 500, similarity: cosine }
+#   key: sknn
 - class: knn.vsknn.VMContextKNN
   params: { k: 500, sample_size: 5000, weighting: quadratic , weighting_score: div, idf_weighting: 5  }
   key: vsknn
