@@ -1,13 +1,13 @@
-import concurrent
-import os
-from more_itertools import batched
-
 import numpy as np
 from sklearn.linear_model import LinearRegression
+from scipy.spatial.distance import cosine
 
-from algo import embedding_similarity
+# from algo import embedding_similarity
 
 from tqdm import tqdm
+
+def embedding_similarity(a_embeddings, b_embeddings):
+    return cosine(a_embeddings.T, b_embeddings.T)
 
 def calc_distances(embeddings):
     average_distances = []
